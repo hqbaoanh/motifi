@@ -1,6 +1,13 @@
 # MotiFi · Personalized Finance SaaS Platform
 
-**MotiFi** is an intelligent personal finance platform designed to help users align their financial habits with their life goals and emotional well-being. It blends budgeting, behavioral tracking, and AI-enhanced coaching into one cohesive experience.
+Hi 👋 Welcome to **MotiFi** — the intelligent finance platform that believes:
+
+> “You're richer than you think.” 💸 (Especially if you stop ordering $7 lattes every day.)
+
+MotiFi helps you align your money with your mood, values, and goals.  
+It's like therapy for your budget — but with charts.
+
+On a more serious note, **MotiFi** is an intelligent personal finance platform designed to help users align their financial habits with their life goals and emotional well-being. It blends budgeting, behavioral tracking, and AI-enhanced coaching into one cohesive experience.
 
 MotiFi is built with scalability and multi-platform support in mind — delivering a unified experience across **web**, **mobile**, and future smart device integrations.
 
