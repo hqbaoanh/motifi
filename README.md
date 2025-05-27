@@ -4,8 +4,8 @@ Hi 👋 Welcome to **MotiFi** — the intelligent finance platform that believes
 
 > “You're richer than you think.” 💸 (Especially if you stop ordering $7 lattes every day.)
 
-MotiFi helps you align your money with your mood, values, and goals.  
-It's like therapy for your budget — but with charts.
+MotiFi helps you align your spending with your values, mood, and life goals — because budgeting shouldn’t feel like punishment.  
+Think of it as **financial wellness** with a side of motivation, all wrapped in a modern web + mobile experience.
 
 On a more serious note, **MotiFi** is an intelligent personal finance platform designed to help users align their financial habits with their life goals and emotional well-being. It blends budgeting, behavioral tracking, and AI-enhanced coaching into one cohesive experience.
 
