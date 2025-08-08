@@ -9,8 +9,6 @@ Think of it as **financial wellness** with a side of motivation, all wrapped in 
 
 On a more serious note, **MotiFi** is an intelligent personal finance platform designed to help users align their financial habits with their life goals and emotional well-being. It blends budgeting, behavioral tracking, and AI-enhanced coaching into one cohesive experience.
 
-
-
 MotiFi is built with scalability and multi-platform support in mind — delivering a unified experience across **web**, **mobile**, and future smart device integrations.
 
 ---
