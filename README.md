@@ -11,7 +11,6 @@ On a more serious note, **MotiFi** is an intelligent personal finance platform d
 
 MotiFi is built with scalability and multi-platform support in mind — delivering a unified experience across **web**, **mobile**, and future smart device integrations.
 
-
 ---
 
 ## 📦 Overview
