@@ -1,0 +1,39 @@
+Sort  (cost=26.28..26.32 rows=17 width=68) (actual time=0.240..0.245 rows=71 loops=1)
+  Sort Key: (date_trunc('month'::text, t.posted_at)), ((sum((- t.amount_cents)))::bigint) DESC
+  Sort Method: quicksort  Memory: 30kB
+  Buffers: shared hit=67
+  ->  Hash Left Join  (cost=23.58..25.93 rows=17 width=68) (actual time=0.149..0.209 rows=71 loops=1)
+        Hash Cond: (c.parent_id = p.id)
+        Buffers: shared hit=67
+        ->  Hash Join  (cost=22.20..24.46 rows=17 width=30) (actual time=0.137..0.169 rows=71 loops=1)
+              Hash Cond: (t.category_id = c.id)
+              Buffers: shared hit=66
+              ->  HashAggregate  (cost=20.82..22.20 rows=69 width=22) (actual time=0.121..0.139 rows=71 loops=1)
+                    Group Key: date_trunc('month'::text, t.posted_at), t.category_id
+                    Batches: 1  Memory Usage: 32kB
+                    Buffers: shared hit=65
+                    ->  Nested Loop  (cost=0.72..19.96 rows=69 width=18) (actual time=0.019..0.078 rows=107 loops=1)
+                          Buffers: shared hit=65
+                          ->  Index Scan using accounts_user_id_idx on accounts a  (cost=0.29..8.32 rows=2 width=8) (actual time=0.006..0.007 rows=3 loops=1)
+                                Index Cond: (user_id = '2270'::bigint)
+                                Buffers: shared hit=3
+                          ->  Index Only Scan using transactions_account_posted_idx on transactions t  (cost=0.43..5.38 rows=35 width=26) (actual time=0.006..0.015 rows=36 loops=3)
+                                Index Cond: ((account_id = a.id) AND (posted_at >= '2025-10-01 00:00:00+00'::timestamp with time zone) AND (posted_at < '2026-10-01 00:00:00+00'::timestamp with time zone))
+                                Filter: (amount_cents < 0)
+                                Rows Removed by Filter: 3
+                                Heap Fetches: 0
+                                Buffers: shared hit=62
+              ->  Hash  (cost=1.17..1.17 rows=17 width=12) (actual time=0.012..0.013 rows=17 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=1
+                    ->  Seq Scan on categories c  (cost=0.00..1.17 rows=17 width=12) (actual time=0.004..0.007 rows=17 loops=1)
+                          Buffers: shared hit=1
+        ->  Hash  (cost=1.17..1.17 rows=17 width=10) (actual time=0.006..0.006 rows=17 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=1
+              ->  Seq Scan on categories p  (cost=0.00..1.17 rows=17 width=10) (actual time=0.001..0.003 rows=17 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=16
+Planning Time: 0.338 ms
+Execution Time: 0.285 ms

@@ -1,0 +1,40 @@
+Limit  (cost=616.70..616.83 rows=50 width=72) (actual time=2.336..2.415 rows=50 loops=1)
+  Buffers: shared hit=118 read=146
+  ->  Sort  (cost=616.70..617.08 rows=150 width=72) (actual time=2.334..2.345 rows=50 loops=1)
+        Sort Key: t.posted_at DESC, t.id DESC
+        Sort Method: top-N heapsort  Memory: 35kB
+        Buffers: shared hit=118 read=146
+        ->  Nested Loop Left Join  (cost=7.33..611.72 rows=150 width=72) (actual time=0.145..2.170 rows=225 loops=1)
+              Buffers: shared hit=118 read=146
+              ->  Hash Left Join  (cost=7.18..606.11 rows=150 width=66) (actual time=0.135..1.938 rows=225 loops=1)
+                    Hash Cond: (t.merchant_id = m.id)
+                    Buffers: shared hit=94 read=146
+                    ->  Nested Loop  (cost=5.30..603.79 rows=150 width=65) (actual time=0.094..1.792 rows=225 loops=1)
+                          Buffers: shared hit=93 read=146
+                          ->  Index Scan using accounts_user_id_idx on accounts a  (cost=0.29..8.32 rows=2 width=15) (actual time=0.024..0.028 rows=3 loops=1)
+                                Index Cond: (user_id = '2270'::bigint)
+                                Buffers: shared hit=3
+                          ->  Bitmap Heap Scan on transactions t  (cost=5.01..296.98 rows=75 width=66) (actual time=0.044..0.554 rows=75 loops=3)
+                                Recheck Cond: (a.id = account_id)
+                                Heap Blocks: exact=225
+                                Buffers: shared hit=90 read=146
+                                ->  Bitmap Index Scan on transactions_account_posted_idx  (cost=0.00..4.99 rows=75 width=0) (actual time=0.025..0.025 rows=75 loops=3)
+                                      Index Cond: (account_id = a.id)
+                                      Buffers: shared hit=10 read=1
+                    ->  Hash  (cost=1.39..1.39 rows=39 width=17) (actual time=0.032..0.033 rows=39 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                          Buffers: shared hit=1
+                          ->  Seq Scan on merchants m  (cost=0.00..1.39 rows=39 width=17) (actual time=0.005..0.016 rows=39 loops=1)
+                                Buffers: shared hit=1
+              ->  Memoize  (cost=0.15..0.17 rows=1 width=10) (actual time=0.000..0.000 rows=1 loops=225)
+                    Cache Key: t.category_id
+                    Cache Mode: logical
+                    Hits: 213  Misses: 12  Evictions: 0  Overflows: 0  Memory Usage: 2kB
+                    Buffers: shared hit=24
+                    ->  Index Scan using categories_pkey on categories c  (cost=0.14..0.16 rows=1 width=10) (actual time=0.002..0.002 rows=1 loops=12)
+                          Index Cond: (id = t.category_id)
+                          Buffers: shared hit=24
+Planning:
+  Buffers: shared hit=22
+Planning Time: 0.628 ms
+Execution Time: 2.492 ms

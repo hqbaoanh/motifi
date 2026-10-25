@@ -1,115 +1,65 @@
-# MotiFi · Personalized Finance SaaS Platform
-
-Hi 👋 Welcome to **MotiFi** — the intelligent finance platform that believes:
+# MotiFi · Personalized Finance Platform
 
 > “You're richer than you think.” 💸 (Especially if you stop ordering $7 lattes every day.)
 
-MotiFi helps you align your spending with your values, mood, and life goals — because budgeting shouldn’t feel like punishment.  
-Think of it as **financial wellness** with a side of motivation, all wrapped in a modern web + mobile experience.
+MotiFi helps people line up their spending with their values and goals. The idea is that
+budgeting shouldn't feel like punishment: connect your accounts, see where the money
+actually goes, and get nudged toward what you care about.
 
-On a more serious note, **MotiFi** is an intelligent personal finance platform designed to help users align their financial habits with their life goals and emotional well-being. It blends budgeting, behavioral tracking, and AI-enhanced coaching into one cohesive experience.
+## What's built
 
-MotiFi is built with scalability and multi-platform support in mind — delivering a unified experience across **web**, **mobile**, and future smart device integrations.
+The backend in [`server/`](server/) is working and tested:
 
----
+- **Transaction ingestion.** A Node.js + Express service receives signed webhooks from a
+  bank aggregator, validates them, and writes them to Postgres. Retried deliveries and
+  resent transactions are deduplicated by the database, so nothing is counted twice.
+- **Categorization.** Raw bank descriptions like `TIM HORTONS #4521 VANCOUVER BC` are
+  normalized to a merchant (`tim hortons`) and a category (Coffee) with an in-memory
+  hash map of keyword rules.
+- **Analytics API.** Monthly spending by category across all of a user's accounts, and a
+  paginated transaction feed.
+- **Schema** in third normal form with indexes chosen from `EXPLAIN ANALYZE` output.
+- **Tests and benchmarks.** 19 unit and integration tests run in CI against Postgres.
+  On a 2 vCPU machine the API sustains about 1,000 webhook requests/sec (6,000 to 7,000
+  transactions/sec when batched), and the indexes cut spending query latency by about 80%.
+  Details and raw results: [`server/README.md`](server/README.md).
 
-## 📦 Overview
+The web client in `client-vite/` is an early landing page prototype and isn't connected
+to the API yet.
 
-|              | Description                               |
-|--------------|-------------------------------------------|
-| **Type**     | SaaS (Personal Finance & Productivity)    |
-| **Status**   | Active development (MVP stage)            |
-| **Frontend** | Vite + React (TypeScript)                 |
-| **Backend**  | Python (Flask)                            |
-| **Mobile**   | React Native (planned)                    |
-| **Auth**     | Firebase Auth (planned)                   |
-| **Billing**  | Stripe (planned)                          |
+## Roadmap
 
----
+| Status | Feature |
+|---|---|
+| ✅ | Webhook ingestion with idempotency and signature verification |
+| ✅ | Merchant normalization and rule-based categorization |
+| ✅ | Spending analytics and transaction feed API |
+| ✅ | Integration tests, CI, load and query benchmarks |
+| ⏳ | Authentication (user-scoped API access) |
+| ⏳ | Web dashboard on top of the analytics API |
+| 🔜 | Goals and value-based budgets |
+| 🔜 | Learning categories from user corrections |
+| 🔜 | Mobile app |
 
-## ✨ Key Features
+## Running locally
 
-- 🧠 Value-based budgeting system
-- 📊 Real-time feedback based on emotional and financial data
-- 🧘‍♀️ Mood & habit tracking integrated into budget planning
-- 🔁 Data syncing across web and mobile
-- 📦 Secure user auth and encrypted data storage
-- 🔐 Role-based permission system (admin, user)
-- 🤖 GPT-powered spending insights and coaching (planned)
+```bash
+docker compose up -d     # Postgres 16
+cd server
+npm install
+npm run migrate
+npm start                # API on :3000
+npm test
+```
 
----
+Frontend prototype:
 
-## 🛠️ Tech Stack
-
-| Layer     | Technology                     |
-|-----------|--------------------------------|
-| Frontend  | Vite, React, TypeScript, CSS Modules |
-| Backend   | Flask, Flask-CORS, Python 3.9  |
-| Auth      | Firebase Auth (planned)        |
-| Payments  | Stripe (planned)               |
-| Deployment | Vercel (frontend), Render (backend) |
-| Monitoring | LogRocket, Sentry (planned)   |
-
----
-
-## 🧭 Architecture
-
-- client-vite/   –> Web frontend (React + Vite)
-- server/        –> REST API (Flask)
-- docs/          –> Architecture, API, and onboarding guides
-- mobile/        –> React Native app (coming soon)
-
----
-
-## 🧪 Local Development
-
-### Prerequisites:
-- Node.js ≥ 18.x
-- Python ≥ 3.9
-- Git + SSH set up
-
-### Frontend:
 ```bash
 cd client-vite
 npm install
-npm run dev 
-```
-## Backend: 
-```cd server
-python3 -m venv venv
-source venv/bin/activate
-pip install flask flask-cors
-python app.py
+npm run dev
 ```
 
-## 📈 Roadmap
+## Contact
 
-We’re building MotiFi in phases to deliver value fast and iterate with users.
-
-| Status | Feature                                      | Target |
-|--------|----------------------------------------------|--------|
-| ✅     | Web budget form with backend API             | v0.1   |
-| ✅     | GitHub repo with SSH and structured README   | v0.1   |
-| ⏳     | Mood & habit tracking module                 | v0.2   |
-| ⏳     | Firebase Authentication (Sign in / Sign up)  | v0.2   |
-| 🔜     | Stripe billing & subscription plans          | v0.3   |
-| 🔜     | GPT-powered budget recommendations           | v0.3   |
-| 🔜     | Mobile app (React Native with Expo)          | v0.4   |
-| 🧪     | Unit/integration testing (Vitest + Pytest)   | v0.4   |
-| 🧭     | Admin dashboard for user & revenue insights  | v0.5   |
-
-## 📄 License
-
-**Proprietary – All rights reserved**
-
-© 2025 MotiFi Inc. This software is not open source and may not be copied, modified, or distributed without prior written permission from the author.
-
-For licensing inquiries, contact: licensing@motifi.app
-
-## Contact & Team 
-Lead Developer: **Huynh Quang Bao Anh**
-
-Github: @hqbaoanh
-
-Email: huynhquang.baoanh@gmail.com 
-
+Anh Huynh · [@hqbaoanh](https://github.com/hqbaoanh) · huynhquang.baoanh@gmail.com

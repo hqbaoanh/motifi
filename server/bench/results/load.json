@@ -1,0 +1,62 @@
+{
+  "ran_at": "2026-10-25T07:55:42.826Z",
+  "machine": {
+    "cpus": 2,
+    "cpu_model": "Intel(R) Xeon(R) Processor @ 2.80GHz",
+    "memory_gb": 8
+  },
+  "note": "Load generator, API, and Postgres (default config, fsync on) all on the same machine.",
+  "table_rows_at_start": 3462421,
+  "transactions_written": 322935,
+  "transactions_expected": 322426,
+  "runs": [
+    {
+      "workers": 1,
+      "batch": 1,
+      "connections": 32,
+      "duration_s": 20.1,
+      "requests_ok": 20748,
+      "errors": 0,
+      "req_per_sec": 1034,
+      "tx_per_sec": 1034,
+      "latency_p50_ms": 25,
+      "latency_p99_ms": 83
+    },
+    {
+      "workers": 1,
+      "batch": 10,
+      "connections": 32,
+      "duration_s": 20,
+      "requests_ok": 14010,
+      "errors": 0,
+      "req_per_sec": 699,
+      "tx_per_sec": 6995,
+      "latency_p50_ms": 43,
+      "latency_p99_ms": 92
+    },
+    {
+      "workers": 2,
+      "batch": 1,
+      "connections": 32,
+      "duration_s": 20,
+      "requests_ok": 19928,
+      "errors": 0,
+      "req_per_sec": 995,
+      "tx_per_sec": 995,
+      "latency_p50_ms": 27,
+      "latency_p99_ms": 99
+    },
+    {
+      "workers": 2,
+      "batch": 10,
+      "connections": 32,
+      "duration_s": 20,
+      "requests_ok": 14165,
+      "errors": 0,
+      "req_per_sec": 707,
+      "tx_per_sec": 7072,
+      "latency_p50_ms": 39,
+      "latency_p99_ms": 125
+    }
+  ]
+}
