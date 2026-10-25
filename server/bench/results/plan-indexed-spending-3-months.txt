@@ -1,0 +1,41 @@
+Sort  (cost=22.12..22.16 rows=17 width=68) (actual time=0.198..0.201 rows=16 loops=1)
+  Sort Key: totals.month, totals.spent_cents DESC
+  Sort Method: quicksort  Memory: 26kB
+  Buffers: shared hit=28
+  ->  Hash Left Join  (cost=20.28..21.77 rows=17 width=68) (actual time=0.161..0.184 rows=16 loops=1)
+        Hash Cond: (c.parent_id = p.id)
+        Buffers: shared hit=28
+        ->  Hash Join  (cost=18.90..20.30 rows=17 width=30) (actual time=0.143..0.152 rows=16 loops=1)
+              Hash Cond: (c.id = totals.category_id)
+              Buffers: shared hit=27
+              ->  Seq Scan on categories c  (cost=0.00..1.17 rows=17 width=12) (actual time=0.003..0.005 rows=17 loops=1)
+                    Buffers: shared hit=1
+              ->  Hash  (cost=18.68..18.68 rows=18 width=22) (actual time=0.134..0.135 rows=16 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=26
+                    ->  Subquery Scan on totals  (cost=18.14..18.68 rows=18 width=22) (actual time=0.118..0.129 rows=16 loops=1)
+                          Buffers: shared hit=26
+                          ->  HashAggregate  (cost=18.14..18.50 rows=18 width=22) (actual time=0.118..0.126 rows=16 loops=1)
+                                Group Key: date_trunc('month'::text, t.posted_at), t.category_id
+                                Batches: 1  Memory Usage: 24kB
+                                Buffers: shared hit=26
+                                ->  Nested Loop  (cost=0.72..17.91 rows=18 width=18) (actual time=0.067..0.101 rows=28 loops=1)
+                                      Buffers: shared hit=26
+                                      ->  Index Scan using accounts_user_id_idx on accounts a  (cost=0.29..8.32 rows=2 width=8) (actual time=0.008..0.009 rows=3 loops=1)
+                                            Index Cond: (user_id = '2270'::bigint)
+                                            Buffers: shared hit=3
+                                      ->  Index Only Scan using transactions_account_posted_idx on transactions t  (cost=0.43..4.68 rows=9 width=26) (actual time=0.021..0.025 rows=9 loops=3)
+                                            Index Cond: ((account_id = a.id) AND (posted_at >= '2026-07-01 00:00:00+00'::timestamp with time zone) AND (posted_at < '2026-10-01 00:00:00+00'::timestamp with time zone))
+                                            Filter: (amount_cents < 0)
+                                            Rows Removed by Filter: 2
+                                            Heap Fetches: 0
+                                            Buffers: shared hit=23
+        ->  Hash  (cost=1.17..1.17 rows=17 width=10) (actual time=0.011..0.011 rows=17 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=1
+              ->  Seq Scan on categories p  (cost=0.00..1.17 rows=17 width=10) (actual time=0.003..0.006 rows=17 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=16
+Planning Time: 0.393 ms
+Execution Time: 0.251 ms

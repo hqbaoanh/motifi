@@ -1,0 +1,58 @@
+{
+  "ran_at": "2026-10-25T07:48:45.161Z",
+  "dataset": {
+    "users": 20000,
+    "accounts": 40072,
+    "transactions": 3005400,
+    "postgres": "PostgreSQL 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit"
+  },
+  "sample_users": 300,
+  "baseline": {
+    "spending, 3 months": {
+      "p50_ms": 5.515,
+      "p95_ms": 8.815,
+      "mean_ms": 6.031
+    },
+    "spending, 12 months": {
+      "p50_ms": 5.771,
+      "p95_ms": 9.491,
+      "mean_ms": 6.365
+    },
+    "feed, first page (50)": {
+      "p50_ms": 7.337,
+      "p95_ms": 11.15,
+      "mean_ms": 7.545
+    }
+  },
+  "indexed": {
+    "spending, 3 months": {
+      "p50_ms": 1.028,
+      "p95_ms": 1.421,
+      "mean_ms": 1.06
+    },
+    "spending, 12 months": {
+      "p50_ms": 1.261,
+      "p95_ms": 2.402,
+      "mean_ms": 1.403
+    },
+    "feed, first page (50)": {
+      "p50_ms": 3.144,
+      "p95_ms": 5.724,
+      "mean_ms": 3.406
+    }
+  },
+  "summary": {
+    "spending, 3 months": {
+      "p50_reduction_pct": 81.4,
+      "p95_reduction_pct": 83.9
+    },
+    "spending, 12 months": {
+      "p50_reduction_pct": 78.1,
+      "p95_reduction_pct": 74.7
+    },
+    "feed, first page (50)": {
+      "p50_reduction_pct": 57.1,
+      "p95_reduction_pct": 48.7
+    }
+  }
+}
