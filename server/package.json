@@ -1,0 +1,28 @@
+{
+  "name": "motifi-server",
+  "version": "0.2.0",
+  "private": true,
+  "description": "MotiFi transaction ingestion and analytics API",
+  "type": "module",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "migrate": "node src/migrate.js",
+    "test": "node --test --test-concurrency=1 \"test/**/*.test.js\"",
+    "bench:seed": "node bench/seed.js",
+    "bench:queries": "node bench/queries.js",
+    "bench:load": "node bench/load.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "pg": "^8.16.0",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "autocannon": "^8.0.0",
+    "supertest": "^7.1.0"
+  }
+}
