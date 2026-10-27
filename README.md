@@ -1,47 +1,48 @@
-# MotiFi · Personalized Finance Platform
+# MotiFi
 
-> “You're richer than you think.” 💸 (Especially if you stop ordering $7 lattes every day.)
+A personal finance app I'm building. You connect your bank accounts, it pulls in your
+transactions, sorts them into categories, and shows you where your money went each month.
+Eventually I want it to help you set goals and budget around what you actually care about.
 
-MotiFi helps people line up their spending with their values and goals. The idea is that
-budgeting shouldn't feel like punishment: connect your accounts, see where the money
-actually goes, and get nudged toward what you care about.
+Right now the backend works and the frontend doesn't do much yet.
 
-## What's built
+## What works
 
-The backend in [`server/`](server/) is working and tested:
+The API in [`server/`](server/) is a Node.js and Express service on Postgres.
 
-- **Transaction ingestion.** A Node.js + Express service receives signed webhooks from a
-  bank aggregator, validates them, and writes them to Postgres. Retried deliveries and
-  resent transactions are deduplicated by the database, so nothing is counted twice.
-- **Categorization.** Raw bank descriptions like `TIM HORTONS #4521 VANCOUVER BC` are
-  normalized to a merchant (`tim hortons`) and a category (Coffee) with an in-memory
-  hash map of keyword rules.
-- **Analytics API.** Monthly spending by category across all of a user's accounts, and a
-  paginated transaction feed.
-- **Schema** in third normal form with indexes chosen from `EXPLAIN ANALYZE` output.
-- **Tests and benchmarks.** 19 unit and integration tests run in CI against Postgres.
-  On a 2 vCPU machine the API sustains about 1,000 webhook requests/sec (6,000 to 7,000
-  transactions/sec when batched), and the indexes cut spending query latency by about 80%.
-  Details and raw results: [`server/README.md`](server/README.md).
+A bank aggregator sends transactions to it as signed webhooks. The server checks the
+HMAC signature, validates the payload, and writes the transactions to the database.
+Aggregators retry deliveries, so the same event or transaction can show up more than
+once. Unique constraints in the database handle that, which means a duplicate never gets
+counted twice even if two copies arrive at the same time.
 
-The web client in `client-vite/` is an early landing page prototype and isn't connected
-to the API yet.
+Bank descriptions are messy (`TIM HORTONS #4521 VANCOUVER BC`), so each one gets cleaned
+up into a merchant name (`tim hortons`) and matched to a category (Coffee) using a set of
+keyword rules loaded into memory.
 
-## Roadmap
+There are two read endpoints so far: monthly spending by category across all of a user's
+accounts, and a paginated list of transactions.
 
-| Status | Feature |
-|---|---|
-| ✅ | Webhook ingestion with idempotency and signature verification |
-| ✅ | Merchant normalization and rule-based categorization |
-| ✅ | Spending analytics and transaction feed API |
-| ✅ | Integration tests, CI, load and query benchmarks |
-| ⏳ | Authentication (user-scoped API access) |
-| ⏳ | Web dashboard on top of the analytics API |
-| 🔜 | Goals and value-based budgets |
-| 🔜 | Learning categories from user corrections |
-| 🔜 | Mobile app |
+There are 19 tests (unit and integration) that run against a real Postgres in GitHub
+Actions. I also load tested it on a 2 vCPU machine, where it handled about 1,000 webhook
+requests per second, or 6,000 to 7,000 transactions per second when they come in batches.
+Adding a covering index, picked by reading `EXPLAIN ANALYZE` output, brought a
+3 month spending query from 5.5 ms to 1.0 ms (p50) on 3M transactions. The endpoint docs and raw
+benchmark results are in [`server/README.md`](server/README.md).
 
-## Running locally
+`client-vite/` is an early landing page and isn't hooked up to the API.
+
+## What's next
+
+- Auth, so users can only see their own data
+- A dashboard on top of the analytics endpoints
+- Goals and budgets
+- Learning categories from the corrections users make
+- Maybe a mobile app
+
+## Running it
+
+You need Node 20+ and Docker.
 
 ```bash
 docker compose up -d     # Postgres 16
@@ -52,7 +53,7 @@ npm start                # API on :3000
 npm test
 ```
 
-Frontend prototype:
+For the landing page:
 
 ```bash
 cd client-vite
@@ -62,4 +63,4 @@ npm run dev
 
 ## Contact
 
-Anh Huynh · [@hqbaoanh](https://github.com/hqbaoanh) · huynhquang.baoanh@gmail.com
+Anh Huynh, [@hqbaoanh](https://github.com/hqbaoanh), huynhquang.baoanh@gmail.com

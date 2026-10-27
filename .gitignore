@@ -11,3 +11,4 @@ dist/
 
 # --- Logs or cache ---
 *.log 
+venv/
