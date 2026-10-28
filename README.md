@@ -4,7 +4,7 @@ A personal finance app I'm building. You connect your bank accounts, it pulls in
 transactions, sorts them into categories, and shows you where your money went each month.
 Eventually I want it to help you set goals and budget around what you actually care about.
 
-Right now the backend works and the frontend doesn't do much yet.
+Right now the backend is built and tested. The frontend has not been started yet.
 
 ## What works
 
@@ -30,8 +30,6 @@ Adding a covering index, picked by reading `EXPLAIN ANALYZE` output, brought a
 3 month spending query from 5.5 ms to 1.0 ms (p50) on 3M transactions. The endpoint docs and raw
 benchmark results are in [`server/README.md`](server/README.md).
 
-`client-vite/` is an early landing page and isn't hooked up to the API.
-
 ## What's next
 
 - Auth, so users can only see their own data
@@ -51,14 +49,6 @@ npm install
 npm run migrate
 npm start                # API on :3000
 npm test
-```
-
-For the landing page:
-
-```bash
-cd client-vite
-npm install
-npm run dev
 ```
 
 ## Contact
